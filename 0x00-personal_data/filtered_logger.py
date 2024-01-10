@@ -17,4 +17,4 @@ def filter_datum(
     """Perform filtering and replacement"""
     n = fd("".join([pat.format(fi, fi, separator) for fi in fields]), message)
     value_pattern = "|".join(n[0])
-    return re.subn(value_pattern, redaction, message)[0]
+    return re.sub(value_pattern, redaction, message)
