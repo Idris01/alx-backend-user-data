@@ -5,7 +5,7 @@ import logging
 import re
 from typing import List
 
-pat = r"{}=(?P<{}>.*?){}"
+pat = "{}=(?P<{}>.*?){}"
 fd = re.findall
 
 
