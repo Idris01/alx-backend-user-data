@@ -16,5 +16,5 @@ def filter_datum(
         separator: str) -> str:
     """Perform filtering and replacement"""
     n = fd("".join([pat.format(fi, fi, separator) for fi in fields]), message)
-    va = "" if not n else "|".join(n[0])
-    return message if not fields else re.sub(va, redaction, message)
+    va = "" if not n else "|".join(["=" + i for i in n[0]])
+    return message if not fields else re.sub(va, "=" + redaction, message)
