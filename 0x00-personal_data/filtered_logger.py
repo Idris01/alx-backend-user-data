@@ -7,7 +7,7 @@ from typing import List
 
 pat = "{}=(?P<{}>.*?){}"
 fd = re.findall
-PII_FIELDS = ["email", "phone", "ssn", "password", "ip"]
+PII_FIELDS = ["name", "email", "phone", "password", "ip"]
 
 
 def filter_datum(
