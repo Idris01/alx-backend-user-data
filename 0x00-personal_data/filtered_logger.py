@@ -7,7 +7,7 @@ from typing import List
 
 pat = "{}=(?P<{}>.*?){}"
 fd = re.findall
-PII_FIELDS = ["name", "email", "phone", "password", "ip"]
+PII_FIELDS = ("email", "phone", "ssn", "password", "ip")
 
 
 def filter_datum(
@@ -43,10 +43,9 @@ class RedactingFormatter(logging.Formatter):
 def get_logger() -> logging.Logger:
     """Get a new logger
     """
-    this_logger = logging.Logger(
-            name="user_data",
-            level=logging.INFO,
-            propagate=False)
+    this_logger = logging.Logger("user_data")
+    this_logger.setLevel(logging.INFO)
+    this_logger.propagate = False
     stream = logging.StreamHandler()
     stream.setFormatter(RedactingFormatter(fields=PII_FIELDS))
     this_logger.setHandler(logging.StreamHandler(stream))
