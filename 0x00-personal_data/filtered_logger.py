@@ -43,7 +43,7 @@ class RedactingFormatter(logging.Formatter):
 def get_logger() -> logging.Logger:
     """Get a new logger
     """
-    this_logger = logging.Logger("user_data")
+    this_logger = logging.getLogger("user_data")
     this_logger.setLevel(logging.INFO)
     this_logger.propagate = False
     stream = logging.StreamHandler()
