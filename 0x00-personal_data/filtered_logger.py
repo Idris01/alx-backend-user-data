@@ -3,15 +3,18 @@
 """
 import logging
 import re
-from typing import List
+from typing import Sequence, Type
+import mysql.connector as connector
+import os
 
+MySQLConnection = Type[connector.connection.MySQLConnection]
 pat = "{}=(?P<{}>.*?){}"
 fd = re.findall
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
 
 def filter_datum(
-        fields: List[str],
+        fields: Sequence[str],
         redaction: str,
         message: str,
         separator: str) -> str:
@@ -29,7 +32,7 @@ class RedactingFormatter(logging.Formatter):
     FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
     SEPARATOR = ";"
 
-    def __init__(self, fields: List[str]):
+    def __init__(self, fields: Sequence[str]):
         super(RedactingFormatter, self).__init__(self.FORMAT)
         self.fields = fields
 
@@ -50,3 +53,14 @@ def get_logger() -> logging.Logger:
     stream.setFormatter(RedactingFormatter(fields=PII_FIELDS))
     this_logger.setHandler(logging.StreamHandler(stream))
     return this_logger
+
+
+def get_db() -> MySQLConnection:
+    """get connection to database
+    """
+    connection = connector.connect(
+            host=os.getenv("PERSONAL_DATA_DB_HOST"),
+            user="root",
+            database=os.getenv("PERSONAL_DATA_DB_NAME"),
+            password=os.getenv("PERSONAL_DATA_DB_PASSWORD"))
+    return connection
