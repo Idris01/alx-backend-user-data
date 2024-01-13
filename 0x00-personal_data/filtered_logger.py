@@ -3,7 +3,7 @@
 """
 import logging
 import re
-from typing import List, Tuple
+from typing import Sequence, List, Tuple
 import mysql.connector as connector
 import os
 
@@ -39,26 +39,3 @@ class RedactingFormatter(logging.Formatter):
         record.msg = filter_datum(
                 self.fields, self.REDACTION, record.msg, self.SEPARATOR)
         return super().format(record)
-
-
-def get_logger() -> logging.Logger:
-    """Get a new logger
-    """
-    this_logger = logging.getLogger("user_data")
-    this_logger.setLevel(logging.INFO)
-    this_logger.propagate = False
-    stream = logging.StreamHandler()
-    stream.setFormatter(RedactingFormatter(fields=PII_FIELDS))
-    this_logger.setHandler(logging.StreamHandler(stream))
-    return this_logger
-
-
-def get_db() -> MySQLConnection:
-    """get connection to database
-    """
-    connection = MySQLConnection(
-            host=os.getenv("PERSONAL_DATA_DB_HOST", "localhost"),
-            user=os.getenv("PERSONAL_DATA_DB_USERNAME", "root"),
-            database=os.getenv("PERSONAL_DATA_DB_NAME"),
-            password=os.getenv("PERSONAL_DATA_DB_PASSWORD", ""))
-    return connection
