@@ -8,8 +8,6 @@ import mysql.connector as connector
 import os
 
 MySQLConnection = connector.connection.MySQLConnection
-pat = "{}=(?P<{}>[^;]*){}"
-fd = re.findall
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
 
@@ -19,9 +17,9 @@ def filter_datum(
         message: str,
         separator: str) -> str:
     """Perform filtering and replacement"""
-    n = fd("".join([pat.format(fi, fi, separator) for fi in fields]), message)
-    va = "" if not n else "|".join([re.escape("=" + i) for i in n[0]])
-    return re.sub("r" + va, "=" + redaction, message)
+    for fld in fields:
+        message = re.sub(fld + "=" + "[^;]*", fld + "=" + redaction, message)
+    return message
 
 
 class RedactingFormatter(logging.Formatter):
@@ -83,3 +81,7 @@ def main() -> None:
                 "user_data", logging.INFO,
                 None, None, template.format(*row), None, None)
         print(formatter.format(log_record))
+
+
+if __name__ == "__main__":
+    main()
