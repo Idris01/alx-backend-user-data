@@ -3,7 +3,7 @@
 """
 import logging
 import re
-from typing import Sequence, List, Tuple
+from typing import  List, Tuple
 import mysql.connector as connector
 import os
 
@@ -66,7 +66,7 @@ def get_db() -> MySQLConnection:
     return connection
 
 
-def main() -> None:
+def main():
     """query and log all users in the database
     """
     db: CMySQLConnection = get_db()
