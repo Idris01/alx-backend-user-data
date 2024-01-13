@@ -17,8 +17,8 @@ def filter_datum(
         message: str,
         separator: str) -> str:
     """Perform filtering and replacement"""
-    for f in fields:
-        message = re.sub(f + "=" + "[^;]*", " " + f + "=" + redaction, message)
+    for fld in fields:
+        message = re.sub(fld + "=" + "[^;]*", fld + "=" + redaction, message)
     return message
 
 
