@@ -7,7 +7,7 @@ from typing import Sequence, Type
 import mysql.connector as connector
 import os
 
-MySQLConnection = Type[connector.connection.MySQLConnection]
+MySQLConnection = connector.connection.MySQLConnection
 pat = "{}=(?P<{}>.*?){}"
 fd = re.findall
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
