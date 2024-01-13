@@ -83,7 +83,3 @@ def main() -> None:
                 "user_data", logging.INFO,
                 None, None, template.format(*row), None, None)
         print(formatter.format(log_record))
-
-
-if __name__ == "__main__":
-    main()
