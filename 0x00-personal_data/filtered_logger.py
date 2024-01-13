@@ -9,6 +9,8 @@ import os
 
 MySQLConnection = connector.connection.MySQLConnection
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
+CMySQLConnection = connector.connection_cext.CMySQLConnection
+CMySQLCursor = connector.cursor_cext.CMySQLCursor
 
 
 def filter_datum(
@@ -64,17 +66,17 @@ def get_db() -> MySQLConnection:
     return connection
 
 
-def main():
+def main() -> None:
     """query and log all users in the database
     """
-    db = get_db()
-    cursor = db.cursor()
+    db: CMySQLConnection = get_db()
+    cursor: CMySQLCursor = db.cursor()
     cursor.execute("SELECT *  FROM users")
-    allfields = (
+    allfields: Tuple[str] = (
             "name", "email", "phone", "ssn",
             "password", "ip", "last_login", "user_agent")
-    template = "={};".join(allfields) + "={};"
-    formatter = RedactingFormatter(fields=PII_FIELDS)
+    template: str = "={};".join(allfields) + "={};"
+    formatter: RedactingFormater = RedactingFormatter(fields=PII_FIELDS)
 
     for row in cursor:
         log_record = logging.LogRecord(
