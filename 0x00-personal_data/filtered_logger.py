@@ -62,3 +62,22 @@ def get_db() -> MySQLConnection:
             host=os.getenv("PERSONAL_DATA_DB_HOST", "localhost"),
             database=os.getenv("PERSONAL_DATA_DB_NAME", "holberton"))
     return connection
+
+
+def main() -> None:
+    """query and log all users in the database
+    """
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute("SELECT *  FROM users")
+    allfields = (
+            "name", "email", "phone", "ssn",
+            "password", "ip", "last_login", "user_agent")
+    template = "={};".join(allfields) + "={};"
+    formatter = RedactingFormatter(fields=PII_FIELDS)
+
+    for row in cursor:
+        log_record = logging.LogRecord(
+                "user_data", logging.INFO,
+                None, None, template.format(*row), None, None)
+        print(formatter.format(log_record))
