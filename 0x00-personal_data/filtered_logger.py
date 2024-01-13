@@ -64,7 +64,7 @@ def get_db() -> MySQLConnection:
     return connection
 
 
-def main() -> None:
+def main():
     """query and log all users in the database
     """
     db = get_db()
