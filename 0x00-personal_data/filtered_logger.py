@@ -14,7 +14,7 @@ CMySQLCursor = connector.cursor_cext.CMySQLCursor
 
 
 def filter_datum(
-        fields: Tuple[str],
+        fields: List[str],
         redaction: str,
         message: str,
         separator: str) -> str:
