@@ -3,7 +3,7 @@
 """
 import logging
 import re
-from typing import Sequence, Type
+from typing import Sequence, Type, Tuple
 import mysql.connector as connector
 import os
 
@@ -14,7 +14,7 @@ CMySQLCursor = connector.cursor_cext.CMySQLCursor
 
 
 def filter_datum(
-        fields: Sequence[str],
+        fields: Tuple[str],
         redaction: str,
         message: str,
         separator: str) -> str:
