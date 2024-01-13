@@ -12,7 +12,7 @@ PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
 
 def filter_datum(
-        fields: Sequence[str],
+        fields: List[str],
         redaction: str,
         message: str,
         separator: str) -> str:
