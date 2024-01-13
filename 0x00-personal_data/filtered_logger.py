@@ -3,7 +3,7 @@
 """
 import logging
 import re
-from typing import Sequence, Type, Tuple
+from typing import Sequence, List, Tuple
 import mysql.connector as connector
 import os
 
