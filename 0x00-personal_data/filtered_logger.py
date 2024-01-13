@@ -21,7 +21,7 @@ def filter_datum(
     """Perform filtering and replacement"""
     n = fd("".join([pat.format(fi, fi, separator) for fi in fields]), message)
     va = "" if not n else "|".join([re.escape("=" + i) for i in n[0]])
-    return re.sub(va, "=" + redaction, message)
+    return re.sub("r" + va, "=" + redaction, message)
 
 
 class RedactingFormatter(logging.Formatter):
