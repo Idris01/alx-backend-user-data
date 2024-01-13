@@ -8,7 +8,7 @@ import mysql.connector as connector
 import os
 
 MySQLConnection = connector.connection.MySQLConnection
-pat = "{}=(?P<{}>.*?){}"
+pat = "{}=(?P<{}>[^;]*){}"
 fd = re.findall
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
@@ -20,7 +20,7 @@ def filter_datum(
         separator: str) -> str:
     """Perform filtering and replacement"""
     n = fd("".join([pat.format(fi, fi, separator) for fi in fields]), message)
-    va = "" if not n else "|".join(["=" + i for i in n[0]])
+    va = "" if not n else "|".join([re.escape("=" + i) for i in n[0]])
     return message if not fields else re.sub(va, "=" + redaction, message)
 
 
@@ -58,9 +58,32 @@ def get_logger() -> logging.Logger:
 def get_db() -> MySQLConnection:
     """get connection to database
     """
-    connection = MySQLConnection(
+    connection = connector.connect(
             host=os.getenv("PERSONAL_DATA_DB_HOST", "localhost"),
             user=os.getenv("PERSONAL_DATA_DB_USERNAME", "root"),
             database=os.getenv("PERSONAL_DATA_DB_NAME"),
             password=os.getenv("PERSONAL_DATA_DB_PASSWORD", ""))
     return connection
+
+
+def main():
+    """query and log all users in the database
+    """
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute("SELECT *  FROM users")
+    allfields = (
+            "name", "email", "phone", "ssn",
+            "password", "ip", "last_login", "user_agent")
+    template = "={};".join(allfields) + "={};"
+    formatter = RedactingFormatter(fields=PII_FIELDS)
+
+    for row in cursor:
+        log_record = logging.LogRecord(
+                "user_data", logging.INFO,
+                None, None, template.format(*row), None, None)
+        print(formatter.format(log_record))
+
+
+if __name__ == "__main__":
+    main()
