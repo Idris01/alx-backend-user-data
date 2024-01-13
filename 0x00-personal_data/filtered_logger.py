@@ -3,7 +3,7 @@
 """
 import logging
 import re
-from typing import  List, Tuple
+from typing import List, Tuple
 import mysql.connector as connector
 import os
 
@@ -56,7 +56,7 @@ def get_logger() -> logging.Logger:
 def get_db() -> MySQLConnection:
     """get connection to database
     """
-    connection = connector.connect(
+    connection = MySQLConnection(
             host=os.getenv("PERSONAL_DATA_DB_HOST", "localhost"),
             user=os.getenv("PERSONAL_DATA_DB_USERNAME", "root"),
             database=os.getenv("PERSONAL_DATA_DB_NAME"),
