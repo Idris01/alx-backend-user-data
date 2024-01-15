@@ -3,6 +3,8 @@
 """
 from .auth import Auth
 import base64
+from models.user import User
+from typing import List, TypeVar
 
 
 class BasicAuth(Auth):
@@ -40,3 +42,19 @@ class BasicAuth(Auth):
             return (None, None)
         colon_index = dec_b64.index(":")
         return (dec_b64[:colon_index], dec_b64[colon_index + 1:])
+
+    def user_object_from_credentials(
+            self,
+            user_email: str,
+            user_pwd: str) -> TypeVar('User'):
+        if not user_email or not user_pwd:
+            return None
+        if not isinstance(user_email, str) or not isinstance(user_pwd, str):
+            return None
+        users = User.search(dict(email=user_email))
+        if not users:
+            return None
+        for user in users:
+            if user.is_valid_password(user_pwd):
+                return user
+        return None
