@@ -25,6 +25,8 @@ paths = ['/api/v1/status/', '/api/v1/unauthorized/', '/api/v1/forbidden/']
 
 @app.before_request
 def before_request():
+    """This will run before any request is processed
+    """
     if auth and auth.require_auth(request.path, paths):
         if not auth.authorization_header(request):
             abort(401)
