@@ -52,10 +52,10 @@ class BasicAuth(Auth):
         """
         if not user_email or not user_pwd:
             return None
-        if not isinstance(user_email, str) or not isinstance(user_pwd, str):
+        if not all(isinstance(itm, str) for itm in (user_email, user_pwd)):
             return None
         users = User.search(dict(email=user_email))
-        if not users:
+        if len(users) == 0:
             return None
         for user in users:
             if user.is_valid_password(user_pwd):
