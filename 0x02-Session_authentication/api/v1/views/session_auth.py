@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """This module define a new view for Session Authentication
 """
-from flask import jsonify, request
+from flask import jsonify, request, abort
 from api.v1.views import app_views
 from models.user import User
 import os
@@ -34,3 +34,18 @@ def login() -> str:
         return jsonify({"error": "wrong password"}), 401
     except Exception:
         return jsonify({"error": "no user found for this email"}), 404
+
+
+@app_views.route(
+        '/auth_session/logout', methods=['DELETE'],
+        strict_slashes=False)
+def logout() -> str:
+    """ DELETE /api/v1/auth_session/logout
+    logout the user
+    """
+    from api.v1.app import auth
+    logged_out = auth.destroy_session(request)
+    if not logged_out:
+        abort(404)
+
+    return jsonify({}), 200
