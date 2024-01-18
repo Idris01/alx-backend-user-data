@@ -23,7 +23,9 @@ elif auth:
     from api.v1.auth.auth import Auth
     auth = Auth()
 
-paths = ['/api/v1/status/', '/api/v1/unauthorized/', '/api/v1/forbidden/']
+paths = [
+        '/api/v1/status/', '/api/v1/unauthorized/', '/api/v1/forbidden/',
+        '/api/v1/auth_session/login/']
 
 
 @app.before_request
@@ -31,7 +33,9 @@ def before_request():
     """This will run before any request is processed
     """
     if auth and auth.require_auth(request.path, paths):
-        if not auth.authorization_header(request):
+        if (
+                not auth.authorization_header(request) 
+                and not auth.session_cookie(request)):
             abort(401)
         current_user = auth.current_user(request)
         if not current_user:
