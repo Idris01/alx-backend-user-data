@@ -10,7 +10,7 @@ app = Flask(__name__)
 def home():
     """Define the home route
     """
-    return jsonify(dict(message="I am a Software Engineer"))
+    return jsonify({"message": "Bienvenue"})
 
 
 if __name__ == "__main__":
